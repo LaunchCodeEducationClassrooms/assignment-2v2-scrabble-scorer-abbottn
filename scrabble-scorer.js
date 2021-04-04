@@ -60,6 +60,21 @@ let scrabble = {
   scorerFunction: oldScrabbleScorer
 }
 
+let improvedScrabble = {
+  name: 'Scrabble',
+  description: 'The improved scoring algorithm',
+  scorerFunction: function(word) {
+    word = word.toLowerCase();
+    console.log(word);
+    for (let i = 0; i < word.length; i++) {
+      let key = word[i];
+      scrabbleScore += newPointStructure[key];
+    }
+    return scrabbleScore;
+    
+  }
+}
+
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
 	let letterPoints = "";
@@ -93,9 +108,11 @@ let simpleScore;
 
 let vowelBonusScore;
 
-let scrabbleScore;
+let scrabbleScore = 0;
 
-const scoringAlgorithms = [simple, vowel, scrabble];
+// const scoringAlgorithms = [simple, vowel, scrabble];
+const scoringAlgorithms = [simple, vowel, improvedScrabble];
+
 
 function scorerPrompt(word) {
   console.log("Which scoring algorithm would you like to use?\n");
@@ -108,9 +125,19 @@ function scorerPrompt(word) {
 
 }
 
-function transform() {};
+function transform(badStructure) {
+  let goodStructure = {};
+  for (const pointValue in badStructure) {
+    let letters = badStructure[pointValue];
+    for (let i = 0; i < letters.length; i++){
+      let key = letters[i].toLowerCase();
+      goodStructure[key] = Number(pointValue);
+    }
+  }
+  return goodStructure;
+}
 
-let newPointStructure;
+let newPointStructure = transform(oldPointStructure);
 
 function runProgram() {
   //initialPrompt();
